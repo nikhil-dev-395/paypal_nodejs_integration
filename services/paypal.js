@@ -89,3 +89,23 @@ export const createOrder = async (amount = 10, currency = "USD") => {
 };
 
 // createOrder();
+export const captureOrder = async (orderId) => {
+  try {
+    const token = await generateAuthToken();
+    const order = await axios({
+      method: "post",
+      url: `${process.env.PAYPAL_BASE_URL}/v2/checkout/orders/${orderId}/capture`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      data: {},
+    });
+
+    console.log(order.data.status);
+
+    return order.data;
+  } catch (error) {
+    console.log(error);
+  }
+};

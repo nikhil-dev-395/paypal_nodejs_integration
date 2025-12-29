@@ -2,7 +2,7 @@ import express from "express";
 import helmet from "helmet";
 import morgan from "morgan";
 import env from "./env.js";
-import { createOrder } from "./services/paypal.js";
+import { captureOrder, createOrder } from "./services/paypal.js";
 
 const app = express();
 
@@ -27,10 +27,23 @@ app.get("/pay", async (req, res) => {
   }
 });
 
-app.get("/cancel-order", (req, res) => {
+app.get("/cancelUrl", (req, res) => {
   res.redirect("/");
 });
 
+app.get("/returnUrl", async (req, res) => {
+  const orderId = req.query.token;
+  if (!orderId) {
+    throw new Error("orderId must be provided");
+  }
+  const valid = await captureOrder(orderId);
+  console.log(valid.status==="COMPLETED");
+  if (valid.status === "COMPLETED") {
+    return res.send({ message: "wallet recharge was successful" });
+  } else {
+    return res.json({ message: "payment not proceed properly" });
+  }
+});
 
 const PORT = env.PORT;
 app.listen(PORT, () => {
