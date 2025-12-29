@@ -23,7 +23,7 @@ This example helps developers quickly understand how to do that in Node.js.
 
 ## Prerequisites
 
-- Node.js 
+- Node.js
 - npm
 - PayPal sandbox account (or live account for production)
 
@@ -54,6 +54,7 @@ PAYPAL_BASE_URL=""
 npm i
 npm run dev
 ```
+*or*
 ```bash
 npm  start
 ```
